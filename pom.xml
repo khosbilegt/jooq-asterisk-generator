@@ -4,19 +4,108 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>mn.unitel.solution</groupId>
+  <groupId>io.github.khosbilegt</groupId>
   <artifactId>asterisk-jooq-enum-converter</artifactId>
-  <version>1.0-SNAPSHOT</version>
-
+  <version>1.0.0</version>
   <name>asterisk-jooq-enum-converter</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
-
+  <description>
+    There is a conflict when using the default JOOQ Generator Strategy for the enum types 'yes_no_values' and 'yesno_values'.
+    This library resolves the issue by renaming them to YesNoValues1 and YesNoValues2 respectively.
+  </description>
+  <url>https://github.com/khosbilegt/jooq-asterisk-generator</url>
+  <developers>
+    <developer>
+      <name>Khosbilegt Bilegsaikhan</name>
+      <email>archerdoc13@gmail.com</email>
+      <organization>Unitel LLC</organization>
+      <organizationUrl>https://www.unitel.mn</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git@github.com:khosbilegt/jooq-asterisk-generator.git</connection>
+    <developerConnection>scm:git:ssh://github.com:khosbilegt/jooq-asterisk-generator.git</developerConnection>
+    <url>https://github.com/khosbilegt/jooq-asterisk-generator</url>
+  </scm>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 
   <dependencies>
     <dependency>
@@ -87,6 +176,50 @@
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>com.jolira</groupId>
+          <artifactId>onejar-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <configuration>
+                <mainClass>org.baeldung.executable.
+                  ExecutableMavenJar</mainClass>
+                <attachToBuild>true</attachToBuild>
+                <filename>
+                  ${project.build.finalName}.${project.packaging}
+                </filename>
+              </configuration>
+              <goals>
+                <goal>one-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.7</version>
+          <extensions>true</extensions>
+          <configuration>
+            <serverId>ossrh</serverId>
+            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.5</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>

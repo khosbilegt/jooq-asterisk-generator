@@ -1,4 +1,4 @@
-package mn.unitel.solution.strategies;
+package io.github.khosbilegt;
 
 import org.jooq.codegen.DefaultGeneratorStrategy;
 import org.jooq.meta.Definition;
